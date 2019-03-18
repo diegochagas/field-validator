@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Field Validator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="src/main.css" />
+    <link rel="shortcut icon" type="image/png" href="src/facial-mask.png" />
+</head>
+<body>
+  <div class="container">
+    <h1>Field Validator</h1>
+    <div class="description">
+      Library with functions to validate inputs fields in JavaScript.
+      <div class="container-code">
+        <h2>Check if email is valid</h2>
+        <div class="description-code">
+          The function return true if an email is valid.
+        </div>
+        <div class="code">
+          <code>
+            emailIsValid('teste@teste.com') = true
+          </code>
+        </div>
+      </div>
+      <div class="container-code">
+        <h2>Check if CPF is valid</h2>
+        <div class="description-code">
+          The function return true if a a brazilian CPF ('Cadastro de Pessoa Física' or 'Individual Registration in English') is valid.
+        </div>
+        <div class="code">
+          <code>
+            CPFIsValid('000.000.000-00') = false
+          </code>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="src/field-validator.js"></script>
+</body>
+</html>

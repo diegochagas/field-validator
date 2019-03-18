@@ -1,2 +1,4 @@
-# field-validator
-Library with functions to validate inputs fields in JavaScript.
+# Field Validator
+
+Library with functions to validate input fields in JavaScript.
+
