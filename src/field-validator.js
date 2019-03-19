@@ -24,10 +24,11 @@ function allCharactersAreEqual (text){
   return sameCharacters;
 }
 
-function validateDigitCPF(cpf, actualLastPosition, positionDigit){
+function validateDigitCPF(cpf, lastPositionToCheck, positionDigit){
   let digits = cpf.substring(9);
-  let lastPosition = actualLastPosition + 1;
-  let numbers = cpf.substring(0, actualLastPosition);
+  let lastPosition = lastPositionToCheck + 1;
+  console.log(`lastPosition: ${lastPosition} cpf.length ${cpf.length}`);
+  let numbers = cpf.substring(0, lastPositionToCheck);
   let sum = 0;
   for (let i = lastPosition; i > 1; i--) {
     sum += numbers.charAt(lastPosition - i) * i;
@@ -36,57 +37,57 @@ function validateDigitCPF(cpf, actualLastPosition, positionDigit){
   return result === parseInt(digits.charAt(positionDigit));
 }
 
-const firstDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, 9, 0);
-const secondDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, 10, 1);
+const firstDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, cpf.length - 2, 0);
+const secondDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, cpf.length - 1, 1);
 
 function CPFIsValid(cpf) {
   cpf = removeDotsAndHyphens(cpf);
-  if (cpf.length < 11) {
-    return false;
-  }
-  if ( allCharactersAreEqual(cpf) || 
-  !firstDigitCPFIsValid(cpf) || 
-  !secondDigitCPFIsValid(cpf)) {
+  if (cpf.length < 11 ||
+        allCharactersAreEqual(cpf) || 
+        !firstDigitCPFIsValid(cpf) || 
+        !secondDigitCPFIsValid(cpf)) {
     return false;
   }
   return true; 
 }
 
 function cnpjValidate(cnpj) {
-  cnpj = removeDotsAndHyphens();
+  cnpj = removeDotsAndHyphens(cnpj);
 
-  var numbers, digits, sum, i, result, pos, size, same_digits;
-  same_digits = 1;
-  if (cnpj.length < 14 && cnpj.length < 15) return false;
-  for (i = 0; i < cnpj.length - 1; i++)
-  if (cnpj.charAt(i) != cnpj.charAt(i + 1)) {
-    same_digits = 0;
-    break;
+  var numbers, digits, sum, i, result, pos, size;
+
+  if (allCharactersAreEqual(cnpj)) {
+    return false;
+  } else {
+    size = cnpj.length - 2;
+    numbers = cnpj.substring(0, size);
+    digits = cnpj.substring(size);
+    sum = 0;
+    pos = size - 7;
+    for (i = size; i >= 1; i--) {
+      sum += numbers.charAt(size - i) * pos--;
+      if (pos < 2) {
+        pos = 9;
+      }
+    }
+    result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    if (result != digits.charAt(0)) {
+      return false;
+    }
+    size = size + 1;
+    numbers = cnpj.substring(0, size);
+    sum = 0;
+    pos = size - 7;
+    for (i = size; i >= 1; i--) {
+      sum += numbers.charAt(size - i) * pos--;
+      if (pos < 2) pos = 9;
+    }
+    result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    if (result != digits.charAt(1)) {
+      return false;
+    }
+    return true;
   }
-  if (!same_digits) {
-  size = cnpj.length - 2;
-  numbers = cnpj.substring(0, size);
-  digits = cnpj.substring(size);
-  sum = 0;
-  pos = size - 7;
-  for (i = size; i >= 1; i--) {
-    sum += numbers.charAt(size - i) * pos--;
-    if (pos < 2) pos = 9;
-  }
-  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-  if (result != digits.charAt(0)) return false;
-  size = size + 1;
-  numbers = cnpj.substring(0, size);
-  sum = 0;
-  pos = size - 7;
-  for (i = size; i >= 1; i--) {
-    sum += numbers.charAt(size - i) * pos--;
-    if (pos < 2) pos = 9;
-  }
-  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-  if (result != digits.charAt(1)) return false;
-  return true;
-  } else return false;
 }
 
 // Functon to jump from next field
