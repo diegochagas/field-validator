@@ -4,9 +4,12 @@ function emailIsValid(fieldValue) {
   return isValid;
 }
 
+const removeIfHasCharacter = (regex, text) => (regex.test(text)) ? text.replace(regex, "") : text;
+
 function removeDotsAndHyphens(text){
-  text = text.replace(/\./g, "");
-  text = text.replace(/-/, "");
+  text = removeIfHasCharacter(/\./g, text);
+  text = removeIfHasCharacter(/-/, text);
+  text = removeIfHasCharacter(/\//g, text);
   return text;
 }
 
@@ -50,49 +53,46 @@ function CPFIsValid(cpf) {
 }
 
 function cnpjValidate(cnpj) {
-// Remove dots and hyphens from number
-cnpj = cnpj.replace(/\./g, "");
-cnpj = cnpj.replace(/-/, "");
-cnpj = cnpj.replace(/\//g, "");
+  cnpj = removeDotsAndHyphens();
 
-var numbers, digits, sum, i, result, pos, size, same_digits;
-same_digits = 1;
-if (cnpj.length < 14 && cnpj.length < 15) return false;
-for (i = 0; i < cnpj.length - 1; i++)
-if (cnpj.charAt(i) != cnpj.charAt(i + 1)) {
-  same_digits = 0;
-  break;
-}
-if (!same_digits) {
-size = cnpj.length - 2;
-numbers = cnpj.substring(0, size);
-digits = cnpj.substring(size);
-sum = 0;
-pos = size - 7;
-for (i = size; i >= 1; i--) {
-  sum += numbers.charAt(size - i) * pos--;
-  if (pos < 2) pos = 9;
-}
-result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-if (result != digits.charAt(0)) return false;
-size = size + 1;
-numbers = cnpj.substring(0, size);
-sum = 0;
-pos = size - 7;
-for (i = size; i >= 1; i--) {
-  sum += numbers.charAt(size - i) * pos--;
-  if (pos < 2) pos = 9;
-}
-result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-if (result != digits.charAt(1)) return false;
-return true;
-} else return false;
+  var numbers, digits, sum, i, result, pos, size, same_digits;
+  same_digits = 1;
+  if (cnpj.length < 14 && cnpj.length < 15) return false;
+  for (i = 0; i < cnpj.length - 1; i++)
+  if (cnpj.charAt(i) != cnpj.charAt(i + 1)) {
+    same_digits = 0;
+    break;
+  }
+  if (!same_digits) {
+  size = cnpj.length - 2;
+  numbers = cnpj.substring(0, size);
+  digits = cnpj.substring(size);
+  sum = 0;
+  pos = size - 7;
+  for (i = size; i >= 1; i--) {
+    sum += numbers.charAt(size - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  if (result != digits.charAt(0)) return false;
+  size = size + 1;
+  numbers = cnpj.substring(0, size);
+  sum = 0;
+  pos = size - 7;
+  for (i = size; i >= 1; i--) {
+    sum += numbers.charAt(size - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  if (result != digits.charAt(1)) return false;
+  return true;
+  } else return false;
 }
 
 // Functon to jump from next field
 function jumpField(next, maxSize, event) {
-if (event.value.length >= maxSize) {
-// Change focus from next component
-next.focus();
-}
+  if (event.value.length >= maxSize) {
+    // Change focus from next component
+    next.focus();
+  }
 }
