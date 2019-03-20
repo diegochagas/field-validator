@@ -26,36 +26,54 @@ function allCharactersAreEqual (text){
 
 function validateDigitCPF(cpf, lastPositionToCheck, positionDigit){
   let digits = cpf.substring(9);
-  let lastPosition = lastPositionToCheck + 1;
-  console.log(`lastPosition: ${lastPosition} cpf.length ${cpf.length}`);
+  let size = lastPositionToCheck + 1;
   let numbers = cpf.substring(0, lastPositionToCheck);
   let sum = 0;
-  for (let i = lastPosition; i > 1; i--) {
-    sum += numbers.charAt(lastPosition - i) * i;
+  for (let i = size; i > 1; i--) {
+    sum += numbers.charAt(size - i) * i;
   }
   let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
   return result === parseInt(digits.charAt(positionDigit));
 }
 
+function validateDigitCNPJ(cnpj) {
+  let size = cnpj.length - 2;
+  let numbers = cnpj.substring(0, size);
+  let digits = cnpj.substring(size);
+  let sum = 0;
+  let pos = size - 7;
+  for (let i = size; i >= 1; i--) {
+    sum += numbers.charAt(size - i) * pos--;
+    if (pos < 2) {
+      pos = 9;
+    }
+  }
+  let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  return result !== parseInt(digits.charAt(0));
+}
+
 const firstDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, cpf.length - 2, 0);
 const secondDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, cpf.length - 1, 1);
 
-function CPFIsValid(cpf) {
-  cpf = removeDotsAndHyphens(cpf);
-  if (cpf.length < 11 ||
-        allCharactersAreEqual(cpf) || 
-        !firstDigitCPFIsValid(cpf) || 
-        !secondDigitCPFIsValid(cpf)) {
+function CPFIsValid(CPF) {
+  CPF = removeDotsAndHyphens(CPF);
+  if (CPF.length < 11 ||
+        allCharactersAreEqual(CPF) || 
+        !firstDigitCPFIsValid(CPF) || 
+        !secondDigitCPFIsValid(CPF)) {
     return false;
   }
   return true; 
 }
 
-function cnpjValidate(cnpj) {
+function CNPJIsValid(cnpj) {
   cnpj = removeDotsAndHyphens(cnpj);
-
-  var numbers, digits, sum, i, result, pos, size;
-
+  let numbers;
+  let digits;
+  let sum;
+  let result;
+  let pos;
+  let size;
   if (allCharactersAreEqual(cnpj)) {
     return false;
   } else {
@@ -64,7 +82,7 @@ function cnpjValidate(cnpj) {
     digits = cnpj.substring(size);
     sum = 0;
     pos = size - 7;
-    for (i = size; i >= 1; i--) {
+    for (let i = size; i >= 1; i--) {
       sum += numbers.charAt(size - i) * pos--;
       if (pos < 2) {
         pos = 9;
@@ -78,9 +96,11 @@ function cnpjValidate(cnpj) {
     numbers = cnpj.substring(0, size);
     sum = 0;
     pos = size - 7;
-    for (i = size; i >= 1; i--) {
+    for (let i = size; i >= 1; i--) {
       sum += numbers.charAt(size - i) * pos--;
-      if (pos < 2) pos = 9;
+      if (pos < 2) {
+        pos = 9;
+      }
     }
     result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
     if (result != digits.charAt(1)) {
@@ -97,3 +117,4 @@ function jumpField(next, maxSize, event) {
     next.focus();
   }
 }
+
