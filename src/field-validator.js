@@ -36,10 +36,9 @@ function validateDigitCPF(cpf, lastPositionToCheck, positionDigit){
   return result === parseInt(digits.charAt(positionDigit));
 }
 
-function validateDigitCNPJ(cnpj) {
-  let size = cnpj.length - 2;
+function validateDigitCNPJ(cnpj, size, positionDigit) {
   let numbers = cnpj.substring(0, size);
-  let digits = cnpj.substring(size);
+  let digits = cnpj.substring(cnpj.length - 2);
   let sum = 0;
   let pos = size - 7;
   for (let i = size; i >= 1; i--) {
@@ -48,12 +47,14 @@ function validateDigitCNPJ(cnpj) {
       pos = 9;
     }
   }
-  let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-  return result !== parseInt(digits.charAt(0));
+  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  return result === parseInt(digits.charAt(positionDigit));
 }
 
 const firstDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, cpf.length - 2, 0);
 const secondDigitCPFIsValid = (cpf) => validateDigitCPF(cpf, cpf.length - 1, 1);
+const firstDigitCNPJIsValid = (cnpj) => validateDigitCNPJ(cnpj, cnpj.length - 2, 0);
+const secondDigitCNPJIsValid = (cnpj) => validateDigitCNPJ(cnpj, cnpj.length - 1, 1);
 
 function CPFIsValid(CPF) {
   CPF = removeDotsAndHyphens(CPF);
@@ -68,44 +69,11 @@ function CPFIsValid(CPF) {
 
 function CNPJIsValid(cnpj) {
   cnpj = removeDotsAndHyphens(cnpj);
-  let numbers;
-  let digits;
-  let sum;
-  let result;
-  let pos;
-  let size;
-  if (allCharactersAreEqual(cnpj)) {
+  if (allCharactersAreEqual(cnpj) ||
+        !firstDigitCNPJIsValid(cnpj) ||
+        !secondDigitCNPJIsValid(cnpj)) {
     return false;
   } else {
-    size = cnpj.length - 2;
-    numbers = cnpj.substring(0, size);
-    digits = cnpj.substring(size);
-    sum = 0;
-    pos = size - 7;
-    for (let i = size; i >= 1; i--) {
-      sum += numbers.charAt(size - i) * pos--;
-      if (pos < 2) {
-        pos = 9;
-      }
-    }
-    result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-    if (result != digits.charAt(0)) {
-      return false;
-    }
-    size = size + 1;
-    numbers = cnpj.substring(0, size);
-    sum = 0;
-    pos = size - 7;
-    for (let i = size; i >= 1; i--) {
-      sum += numbers.charAt(size - i) * pos--;
-      if (pos < 2) {
-        pos = 9;
-      }
-    }
-    result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-    if (result != digits.charAt(1)) {
-      return false;
-    }
     return true;
   }
 }
