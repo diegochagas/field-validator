@@ -24,10 +24,10 @@ function allCharactersAreEqual (text){
   return sameCharacters;
 }
 
-function validateDigitCPF(cpf, lastPositionToCheck, positionDigit){
+function validateDigitCPF(cpf, actualSize, positionDigit){
   let digits = cpf.substring(9);
-  let size = lastPositionToCheck + 1;
-  let numbers = cpf.substring(0, lastPositionToCheck);
+  let size = actualSize + 1;
+  let numbers = cpf.substring(0, actualSize);
   let sum = 0;
   for (let i = size; i > 1; i--) {
     sum += numbers.charAt(size - i) * i;
@@ -36,18 +36,18 @@ function validateDigitCPF(cpf, lastPositionToCheck, positionDigit){
   return result === parseInt(digits.charAt(positionDigit));
 }
 
-function validateDigitCNPJ(cnpj, size, positionDigit) {
-  let numbers = cnpj.substring(0, size);
+function validateDigitCNPJ(cnpj, actualSize, positionDigit) {
   let digits = cnpj.substring(cnpj.length - 2);
+  let numbers = cnpj.substring(0, actualSize);
   let sum = 0;
-  let pos = size - 7;
-  for (let i = size; i >= 1; i--) {
-    sum += numbers.charAt(size - i) * pos--;
+  let pos = actualSize - 7;
+  for (let i = actualSize; i >= 1; i--) {
+    sum += numbers.charAt(actualSize - i) * pos--;
     if (pos < 2) {
       pos = 9;
     }
   }
-  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
   return result === parseInt(digits.charAt(positionDigit));
 }
 
@@ -67,22 +67,14 @@ function CPFIsValid(CPF) {
   return true; 
 }
 
-function CNPJIsValid(cnpj) {
-  cnpj = removeDotsAndHyphens(cnpj);
-  if (allCharactersAreEqual(cnpj) ||
-        !firstDigitCNPJIsValid(cnpj) ||
-        !secondDigitCNPJIsValid(cnpj)) {
+function CNPJIsValid(CNPJ) {
+  CNPJ = removeDotsAndHyphens(CNPJ);
+  if (allCharactersAreEqual(CNPJ) ||
+        !firstDigitCNPJIsValid(CNPJ) ||
+        !secondDigitCNPJIsValid(CNPJ)) {
     return false;
   } else {
     return true;
-  }
-}
-
-// Functon to jump from next field
-function jumpField(next, maxSize, event) {
-  if (event.value.length >= maxSize) {
-    // Change focus from next component
-    next.focus();
   }
 }
 
