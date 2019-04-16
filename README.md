@@ -2,7 +2,7 @@
 
 Library with functions to validate input fields in JavaScript.
 
-## Technologies used
+## Used technologies
 
 - JavaScript
 
