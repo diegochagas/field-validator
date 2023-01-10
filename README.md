@@ -23,3 +23,7 @@ The function return true if a a brazilian CPF ('Cadastro de Pessoa Física' or '
 The function return true if a a brazilian CNPJ ('Cadastro Nacional de Pessoa Jurídica' or National Register of Legal Entities in English) is valid.
 
 `CNPJIsValid("00.000.000/0001-00") = false`
+
+---
+
+# Jesus said to him, "I am the way, and the truth, and the life. No one comes to the Father except through me." - John 14:6
